@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('../partials/head')%>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body>
+    <%-include('../partials/user/user-navbar') %>
+    
+
+
+  
+   <div class="container">
+    <div class="row">
+        <% if(wishlist.length>0){ %>
+            <% wishlist.forEach(items=>{ %>
+        <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+            <!-- Card-->
+            <div class="card shadow-sm border-0 rounded mb-4">
+              <div class="card-body p-0"><img src="<%=items.productId.images[0] %>" alt="" class="w-100 card-img-top">
+                <div class="p-4">
+                  <h5 class="mb-0"><%=items.productId.productname %></h5>
+                  <p class="small text-muted mt-2 fw-bold fs-6"><%=items.productId.price %></p>
+                  <div>
+                    <button class="btn boder-0 btn-warning fw-bold "onclick= "addtoCartfromWish('<%= items.productId.id %>')">
+                        ADD TO CART
+                    </button>
+                    <button type="button" class="btn btn-danger ms-5" onclick="removeWishItem('<%=items.productId.id %>')" data-mdb-toggle="tooltip"title="Remove item">
+                      
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%  }) %>
+    <% } else{ %>
+      <div class="d-flex justify-content-center mb-5">
+        <h4 class="" style="font-family:cursive;"></h4>
+      </div>
+      <div class="d-flex justify-content-center mt-5">
+      <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_qipaj41e.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop  autoplay></lottie-player>
+      </div>
+      
+      
+      <%   } %>
+        </div>
+    </div>
+    
+   </div>
+    <%-include('../partials/bottom-navbar') %>
+    <script src="/script/scriptadmin.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</body>
+</html>

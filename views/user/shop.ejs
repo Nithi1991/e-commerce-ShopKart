@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<%-include('../partials/head')%>
+
+  <body>
+    <%-include('../partials/user/user-navbar')%>
+
+    <div class="container">
+      <div class="col-md-12 my-3">
+        <h2 >ALL PRODUCTS</h2>
+      </div>
+      <div class="row">
+        <div class="col-12 col-lg-2 ">
+          <div class="col-12 pt-1 collapse" id="filters">
+            <p>Price Filter</p>
+            <form action="/products/filter" method="GET" class="row">
+              <div class=" col-6">
+                <input class="form-control range-form border-2" type="text" name="from" id="from" placeholder="from">
+              </div>
+              <div class=" col-6">
+                <input class="form-control range-form border-2" type="text" name="to" id="to" placeholder="to">
+              </div>
+              <div class="d-flex flex-column mt-3">
+                <p>Categories</p>
+                <% category.forEach(item => { %> 
+                <label for="brand">
+                  <input class="form-check-input border-2" type="checkbox" id="category[]"  name="category[]" value="<%=item.id %>"> 
+                  <%= item.categoryname %> 
+                </label>
+                <% }) %> 
+              </div>
+              <div class="pt-4">
+                <button  type="submit" class="btn btn-primary ">Submit</button>
+              </div>
+            </form>
+          </div>
+          <div class="d-flex justify-content-start pt-3">
+            <button class="btn btn-outline-secondary btn-lg fw-bold mb-4" type="button" data-bs-toggle="collapse" data-bs-target="#filters" aria-expanded="false" aria-controls="filters" >FILTERS</button>
+          </div>
+        </div>
+  <div class="col-12 col-lg-10" >
+
+
+        <div class="row">
+        
+            <!-- <div></div>
+        -->
+            <% let count=1 %>
+              <% if(products.length>0){ %>
+                <% products.forEach(item=>{ %>
+                  
+                    <% count++ %>
+
+
+                      <div class="col-md-3">
+                        <a href="/product/details/<%=item._id %>">
+                          <div class="item-card">
+                            <div class="item-card-head">
+                              <img class="item-card-img-top" src="/<%= item.images[0] %>" alt="">
+                              <div class=" surprise-bubble"><span class="item-card-heart">
+                                  <i class="fas fa-heart"></i>
+                                </span><a href="#"> <span>More</span></a>
+                              </div>
+                            </div>
+                            <div class="item-card-body">
+                              <h4 class="item-card-title mt-1">
+                                <%= item.productname %>
+                              </h4>
+                              <p class="item-card-para"></p>
+                              <% if (item.offer>0){ %>
+
+                                <p class="item-card-para mt-1"><span class="fw-bold fs-4"> <Del class="text-danger"> ₹
+                                      <%= item.price%></Del></span><span class="item-card-price fs-4"> ₹ <%= Math.round
+                                      (item.price-(item.price *(item.offer/100))) %>&ensp;</span><span
+                                    class="item-card-crossed mt-1"></span><span
+                                    class="item-card-off text-primary">&ensp;(<%= item.offer %>% OFF)</span></p>
+                                <% } else{ %>
+                                  <p class="item-card-para mt-1"><span class="item-card-price fs-5"> ₹ <%=item.price
+                                        %>&ensp;</span><span class="item-card-crossed mt-1"></span></p>
+                                  <% }%>
+
+                                    <p class="fs-6 fw-bold mt-1 text-primary">Best Selling. Certified seller.</p>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+
+
+                      <% })%>
+                      
+                          <% } else{ %>
+
+                            <div class="vh-100"></div>
+
+                          <%} %>
+                        
+        </div>
+        <div class="col-lg-12">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+          <% for(let i =1; i<=pages; i++){ %>
+          
+            <li class="page-item"><a class="page-link" href="/shop/next/?page=<%= i %>"><%= i %></a></li>
+          <% } %>
+        
+          </ul>
+        </nav>
+        </div>
+      </div>
+        </div>
+        </div>
+      
+    
+      <%-include('../partials/bottom-navbar') %>
+  </body>
+
+</html>
