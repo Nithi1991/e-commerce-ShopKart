@@ -1,44 +1,48 @@
-const mongoose = require ('mongoose')
+const mongoose = require('mongoose')
 
-const paymentSchema =new mongoose.Schema({
-    orderId:{
-        type :mongoose.Schema.Types.ObjectId,
-        ref:'Orders',
-        required :true
+const paymentSchema = new mongoose.Schema({
+    orderId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Orders',
+        required: true
     },
-    customerId:{
-        type : mongoose.Schema.Types.ObjectId,
-        ref:'User',
-        required : true
+    customerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
-    paymentGateway:{
-        type :String,
-        default :'Razorpay'
+    paymentGateway: {
+        type: String,
+        default: 'Razorpay'
     },
-    paymentId:{
-        type : String,
-        required : true
+    paymentId: {
+        type: String,
+        required: true
     },
-    razorpayOrderId:{
-        type:String,
-        required :true
+    razorpayOrderId: {
+        type: String,
+        required: true
     },
-    paymentSignature:{
-        type :String
+    paymentSignature: {
+        type: String
     },
-    status:{
-        type :Boolean,
-        default :false
+    status: {
+        type: Boolean,
+        default: false
     },
-    refundId:{
-        type : String,
+    refund: {
+        type: Boolean,
+        default: false
     },
-    refundStatus :{
-        type :String
+    refundId: {
+        type: String,
+    },
+    refundStatus: {
+        type: String
     }
 
 })
 
-const Payments = mongoose.model('Payments',paymentSchema)
+const Payments = mongoose.model('Payments', paymentSchema)
 
 module.exports = Payments

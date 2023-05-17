@@ -1,9 +1,7 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 
 //  Razorpay
 
-async function Payment (buttonid, discount, offer) {
+async function Payment(buttonid, discount, offer) {
   const button = document.getElementById(buttonid)
   const address = document.querySelector('input[name = "address"]:checked').value
   const url = '/payment/razorpay'
@@ -30,12 +28,12 @@ async function Payment (buttonid, discount, offer) {
   }
 }
 
-function check (order, user) {
+function check(order, user) {
   const options = {
-    key: 'rzp_test_bVuwFNHsddTNfM',
+    key: 'rzp_test_FYf7DPYrvwXLlU',
     amount: order.amount,
     currency: 'INR',
-    name: 'PitBULL',
+    name: 'ShopKart',
     description: 'Test Transaction',
     image: '',
     order_id: order.id,
@@ -66,7 +64,7 @@ function check (order, user) {
   })
 }
 
-async function verifyPayment (payment, order) {
+async function verifyPayment(payment, order) {
   const response = await fetch('/payment/verify', {
     method: 'POST',
     headers: {
@@ -85,7 +83,7 @@ async function verifyPayment (payment, order) {
   }
 }
 
-async function cancelPayment (order) {
+async function cancelPayment(order) {
   try {
     const response = await fetch('/payment/cancel', {
       method: 'POST',
@@ -107,7 +105,7 @@ async function cancelPayment (order) {
   }
 }
 
-async function paymentFail (payment, order) {
+async function paymentFail(payment, order) {
   const response = await fetch('/paymentfail', {
     method: 'POST',
     headers: {
@@ -126,57 +124,4 @@ async function paymentFail (payment, order) {
   }
 }
 
-// Paypal  payment method
 
-// async function paymentPaypal(buttonid){
-//   console.log("paypal");
-//   const button = document.getElementById(buttonid)
-//   const address = document.querySelector('input[name = "address"]:checked').value
-//   const url = "payment/paypal"
-//   button.disabled = true
-//   try {
-//       const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//           address
-//         })
-//       })
-//       const res = await response.json()
-//       if(res.successStatus){
-//         console.log("sucess");
-//         onApprove(id)
-//       }else{
-//         window.location.href = '/checkout'
-//       }
-//     } catch (err) {
-//           }
-
-//   }
-
-//  function onApprove (data, action) {
-//     return actions.order.capture().then(function(orderData) {
-//       // Successful capture! For dev/demo purposes:
-//       console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-//       const transaction = orderData.purchase_units[0].payments.captures[0];
-//       alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
-//           // When ready to go live, remove the alert and show a success message within this page. For example:
-//       // const element = document.getElementById('paypal-button-container');
-//       // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-//       // Or go to another URL:  actions.redirect('thank_you.html');
-//     });
-//   }
-
-//
-//   // Sets up the transaction when a payment button is clicked
-//   createOrder: (data, actions) => {
-//     return actions.order.create({
-//       purchase_units: [{
-//         amount: {
-//           value: '77.44' // Can also reference a variable or function
-//         }
-//       }]
-//     });
-//   },

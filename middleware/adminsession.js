@@ -12,5 +12,6 @@ module.exports = {
     } else {
       res.redirect('/admin/adminlogin')
     }
-  }
+  },
+
 }

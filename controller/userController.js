@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-useless-escape */
-/* eslint-disable eqeqeq */
+
 
 const User = require('../models/user')
 const message = require('../twilio')
@@ -15,6 +13,7 @@ const crypto = require('crypto')
 const Coupons = require('../models/coupon')
 const paypal = require('@paypal/checkout-server-sdk')
 const { default: mongoose } = require('mongoose')
+const Banner = require('../models/banner')
 const Environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET)
 const paypalClient = new paypal.core.PayPalHttpClient(Environment)
 
@@ -42,15 +41,17 @@ module.exports = {
     }
   },
   getLandingpage: async (req, res) => {
+    const banner = await Banner.findOne({ setCurrent: true })
     const products = await Products.find({ isDeleted: false })
 
-    return res.render('landingpage', { products })
+    return res.render('landingpage', { products, banner })
   },
   getHomepage: async (req, res) => {
+    const banner = await Banner.findOne({ setCurrent: true })
     const products = await Products.find({ isDeleted: false }).populate('categoryId')
     const user = await User.find({ isBlocked: false })
     const category = await Categories.find({ isDeleted: false })
-    return res.render('userhome', { products, user, category })
+    return res.render('userhome', { products, user, category, banner })
   },
   getOtp: (req, res) => {
     return res.render('otp')
@@ -272,7 +273,7 @@ module.exports = {
   paymentVerify: async (req, res) => {
     try {
       console.log(req.body.payment)
-      let hmac = crypto.createHmac('sha256', '6ATU4CwacPgOWPolRfew3Ylm')
+      let hmac = crypto.createHmac('sha256', 'ATfwtRsjdXfheN7TgrLiqtG7')
       hmac.update(req.body.payment.razorpay_order_id + '|' + req.body.payment.razorpay_payment_id)
       hmac = hmac.digest('hex')
       if (hmac == req.body.payment.razorpay_signature) {
@@ -514,11 +515,13 @@ module.exports = {
 
   getShop: async (req, res) => {
     try {
+      console.log("get shop")
       let searchWord
       let products
       let user
       let category = await Categories.find({ isDeleted: false })
-      const categoryForfilter = []
+      let categoryForfilter = []
+      let pages
 
       const perPage = 4
       const page = req.session.page || 1
@@ -527,26 +530,28 @@ module.exports = {
           {
             $match:
 
-                {
-                  isDeleted: false
-                }
+            {
+              isDeleted: false
+            }
           },
           {
             $count:
-                'productname'
+              'productname'
           }
         ])
-      console.log(totalCount[0].productname)
 
-      const pages = Math.ceil((totalCount[0].productname) / perPage)
+
+      pages = Math.ceil((totalCount[0].productname) / perPage)
 
       const from = req.session.from || 0
       const to = req.session.to || 100000
-      console.log(from, to + 'in filter')
-      if (req.session.searchWord.length > 0) {
+
+      if (req.session.searchWord) {
         user = await User.find({ isBlocked: false })
         category = await Categories.find({ isDeleted: false })
         searchWord = req.session.searchWord
+        req.session.searchWordforFilter = req.session.searchWord
+        pages = 0
         req.session.searchWord = ''
         products = await Products.aggregate([
           {
@@ -574,19 +579,31 @@ module.exports = {
                 { 'categoryId.categoryname': new RegExp(searchWord, 'i') }
               ]
             }
-          }
-        ]).skip((page - 1) * perPage).limit(perPage)
+          },
+
+
+        ])
+        // .skip((page - 1) * perPage).limit(perPage)
       } else if (req.session.productCategory) {
-        console.log('category filter')
+        searchWord = req.session.searchWordinFilter
         req.session.productCategory.forEach(item => {
           categoryForfilter.push(mongoose.Types.ObjectId(item))
-          console.log(category + 'after filter')
+
         })
+        pages = 0
         req.session.productCategory = null
         products = await Products.aggregate([
           {
+            $unwind: '$categoryId'
+          },
+          {
             $match: {
               isDeleted: false,
+              $or: [
+                { productname: new RegExp(searchWord, 'i') },
+                { color: new RegExp(searchWord, 'i') },
+                { 'categoryId.categoryname': new RegExp(searchWord, 'i') }
+              ],
               categoryId: { $in: categoryForfilter }
             }
           },
@@ -596,17 +613,29 @@ module.exports = {
             }
           }
 
-        ]).skip((page - 1) * perPage).limit(perPage)
+        ])
+        // .skip((page-1) * perPage).limit(perPage)
+
       } else if (req.session.from || req.session.to) {
-        console.log('price filter')
+        searchWord = req.session.searchWordinFilter
         req.session.from = null
         req.session.to = null
+        pages = 0
         req.session.productCategory = null
         products = await Products.aggregate([
+          {
+            $unwind: '$categoryId'
+          },
 
           {
             $match: {
               isDeleted: false,
+              $or: [
+                { productname: new RegExp(searchWord, 'i') },
+                { color: new RegExp(searchWord, 'i') },
+                { 'categoryId.categoryname': new RegExp(searchWord, 'i') }
+              ],
+
               $and: [
                 { price: { $gte: parseInt(from) } },
                 { price: { $lte: parseInt(to) } }
@@ -619,17 +648,22 @@ module.exports = {
               categoryId: 1
             }
           }
-        ]).skip((page - 1) * perPage).limit(perPage)
+        ])
+        // .skip((page - 1) * perPage).limit(perPage)
       } else {
         console.log('normalshop')
+        req.session.searchWordinFilter = ''
+        req.session.searchWordforFilter = ''
         products = await Products.find({ isDeleted: false }).populate('categoryId').skip((page - 1) * perPage).limit(perPage)
 
         category = await Categories.find({ isDeleted: false })
+        searchWord = ''
+
 
         user = await User.find({ isBlocked: false })
       }
 
-      return res.render('user/shop', { products, user, category, pages })
+      return res.render('user/shop', { products, user, category, pages, searchWord })
     } catch (err) {
       console.log(err)
     }
@@ -644,6 +678,10 @@ module.exports = {
   filterProducts: (req, res) => {
     req.session.from = req.query.from
     req.session.to = req.query.to
+    const searchWordinFilter = req.session.searchWordforFilter
+
+    req.session.searchWordinFilter = searchWordinFilter
+    console.log(req.session.searchWordinFilter + "search word in filter");
     console.log(req.session.to, req.session.from)
     req.session.productCategory = req.query.category
 
@@ -654,8 +692,8 @@ module.exports = {
   changePage: async (req, res) => {
     const user = req.session.user
     const category = await Categories.find({ isDeleted: false })
+    searchWord = ''
     const page = req.query.page
-    console.log(page + 'pagination')
     req.session.page = page
     console.log(req.session.page + 'p')
     let products
@@ -668,22 +706,24 @@ module.exports = {
         [
           {
             $match:
-
-                      {
-                        isDeleted: false
-                      }
+            {
+              isDeleted: false
+            }
           },
           {
-            $count:
-                      'productname'
+            $count: 'productname'
           }
         ])
-      console.log(totalCount[0].productname)
+
 
       pages = Math.ceil((totalCount[0].productname) / perPage)
     }
 
-    return res.render('user/shop', { products, user, category, pages })
+    return res.render('user/shop', { products, user, category, pages, searchWord })
+  },
+
+  get404: (req, res) => {
+    res.render('404')
   }
 
 }

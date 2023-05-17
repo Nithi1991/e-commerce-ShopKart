@@ -1,33 +1,37 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark  fixed-top ">
-    <div class="container-fluid ">
-        <a class="brand" href="/home">ShoppyZone</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+  <div class="container-fluid ">
+    <a class="brand" href="/home">ShoppyZone</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <form class="d-flex px-5 " method="get" action="/search" role="search">
+        <input placeholder="Search..." class="search text-light fw-bold" name="search" id="search" type="text">
+        <button class="btn  " type="submit">
+          <iconify-icon class="fs-3 text-light" icon="ic:round-search"></iconify-icon>
         </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                </ul>
-                <form class="d-flex px-5 " method="get" action="/search" role="search">
-                  <input  placeholder="Search..." class="search text-light fw-bold" name="search" id="search" type="text">
-                  <button class="btn  " type="submit"><iconify-icon class="fs-3 text-light" icon="ic:round-search"></iconify-icon></button>
-                </form>
-            <ul class="navbar-nav pt-2">
-                <li ><a class="fs-5 fw-bold mx-3  text-light text-decoration-none "href="/shop"> Shop </a></li>
-                <li><a href="/wishlist"class="text-decoration-none fs-5 fw-bold text-light mx-3" >Wishlist</a></li>
-               <li><a href="/cart"class="text-decoration-none fs-5 fw-bold text-light" ><iconify-icon class="fs-5 text-dark" icon="ic:round-shopping-cart"></iconify-icon>Cart</a></li>
-               <div class="dropdown">
-                <button class=" btn border-0 mx-3 p-0 mb-2 fs-5 fw-bold text-light " type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Account
-                </button>
-                <ul class="dropdown-menu ">
-                  <li><a class="dropdown-item fw-bold" href="/adddetails">Profile</a></li>
-                  <li><a class="dropdown-item fw-bold" href="/orders">Orders</a></li>
-                  <li class="mx-3"><a class="fs-6 fw-bold text-dark text-decoration-none" href="/logout "> Logout </a></li>
-                  <li><a class="dropdown-item" href="#"></a></li>
-                </ul>
-            </div>
-                
-            </ul>
+      </form>
+      <ul class="navbar-nav pt-2">
+        <li><a class="fs-5 fw-bold mx-3  text-light text-decoration-none " href="/shop"> Shop </a></li>
+        <li><a href="/wishlist" class="text-decoration-none fs-5 fw-bold text-light mx-3">Wishlist</a></li>
+        <li><a href="/cart" class="text-decoration-none fs-5 fw-bold text-light">
+            <iconify-icon class="fs-5 text-dark" icon="ic:round-shopping-cart"></iconify-icon>Cart
+          </a></li>
+        <div class="dropdown">
+          <button class=" btn border-0 mx-3 p-0 mb-2 fs-5 fw-bold text-light " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Account
+          </button>
+          <ul class="dropdown-menu ">
+            <li><a class="dropdown-item fw-bold" href="/adddetails">Profile</a></li>
+            <li><a class="dropdown-item fw-bold" href="/orders">Orders</a></li>
+            <li class="mx-3"><a class="fs-6 fw-bold text-dark text-decoration-none" href="/logout "> Logout </a></li>
+            <li><a class="dropdown-item" href="#"></a></li>
+          </ul>
         </div>
+
+      </ul>
     </div>
+  </div>
 </nav>

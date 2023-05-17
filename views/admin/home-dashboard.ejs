@@ -1,26 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-    <%-include ('../partials/head') %>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<%- include('../partials/head') %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<body>
-  <%-include('../partials/admin/dash-navbar') %>
-  <h2>DASHBOARD</h2>
-
-    <div class="d-flex justify-content-center mb-5">
-      <p class="fw-bold justify-content-center">DOWNLOAD THE SALES REPORT &nbsp &nbsp &nbsp</p>
-      <button class="btn btn-danger text-decoration-none fw-bold mx-3"><a class=" text-decoration-none text-dark" href="/admin/sales-report/pdf" method="post">PDF</a></button>
-      <button class="btn btn-success text-decoration-none fw-bold mx-3"><a class=" text-decoration-none text-dark" href="/admin/sales-report/excel" method="post">EXCEL</a></button>
+<body class="d-flex flex-column min-vh-100">
+  <%- include('../partials/admin/dash-navbar') %>
+  <h2 class="p-3"><i>Dashboard</i></h2>
+  <div>
+    <p class="d-flex align-items-center text-center justify-content-center"><a class=" text-decoration-none text-light fw-bolder bg-dark rounded-4 p-2" href="/admin/sale-details" method="post">Sales
+        Report</a></p>
+  </div>
+  <section class="container d-flex">
+    <!-- <div class="d-flex align-items-center ">
+          <div style="width: 1000px ;margin-left: 150px;"><canvas id="saleschart"></canvas>
+          </div>
+        </div> -->
+    <div class="col-md-6 m-3">
+      <div class="card p-3">
+        <h4>Daily Sales</h4>
+        <canvas id="saleschart"></canvas>
+      </div>
     </div>
-   <section class="container">
-    <div class="d-flex align-items-center ">
-      <div style="width: 1000px ;margin-left: 150px;"><canvas  id="saleschart"></canvas></div>
-    </div>
-   </section>
+    <div class="col-md-6 m-3">
+      <div class="card p-3">
+        <h4>Products Sold</h4>
+        <canvas id="productchart"></canvas>
+      </div>
+  </section>
 
-    
-  
-    <%-include ('../partials/bottom-navbar')%>
-    <script src="/script/chart.js"></script>
+  <div class="alert alert-success" role="alert">
+    Download Sales Report
+    in
+    form of
+    <button class="btn btn-danger text-decoration-none fw-bold mx-3"><a class=" text-decoration-none text-dark" href="/admin/sales-report/pdf" method="post">PDF</a></button>
+    OR
+    <button class="btn btn-success text-decoration-none fw-bold mx-3"><a class=" text-decoration-none text-dark" href="/admin/sales-report/excel" method="post">EXCEL</a></button>
+  </div>
+
+
+
+  <%- include('../partials/bottom-navbar')%>
+
+  <!-- <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> -->
+  <script src="/script/chart.js"></script>
 </body>
+
 </html>

@@ -17,7 +17,7 @@ form.addEventListener('submit', (e) => {
   }
 })
 
-function checkInputs () {
+function checkInputs() {
   const usernameValue = username.value.trim()
   const emailValue = email.value.trim()
   const numberValue = number.value.trim()
@@ -58,7 +58,7 @@ function checkInputs () {
   return true
 }
 
-function setErrorFor (input, message) {
+function setErrorFor(input, message) {
   const inputControl = input.parentElement
   const small = inputControl.querySelector('small')
 
@@ -69,21 +69,21 @@ function setErrorFor (input, message) {
   inputControl.className = 'input-control error'
   // return false;
 }
-function setSuccessFor (input) {
+function setSuccessFor(input) {
   const inputControl = input.parentElement
   inputControl.className = 'input-control success'
   return true
 }
-function isEmail (email) {
+function isEmail(email) {
   const regularEx =
-          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return regularEx.test(String(email).toLowerCase())
 }
-function isNumber (number) {
+function isNumber(number) {
   const regularEx = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/
   return regularEx.test(String(number))
 }
-function checkerror () {
+function checkerror() {
   const errrormessage = document.getElementsByClassName('input-control error')
   if (errrormessage.length > 0) {
     return false
@@ -91,3 +91,4 @@ function checkerror () {
     return true
   }
 }
+

@@ -63,9 +63,9 @@
                               </div>
                             </div>
                             <div class="item-card-body">
-                              <h4 class="item-card-title mt-1">
+                              <h5 class="item-card-title mt-1">
                                 <%= item.productname %>
-                              </h4>
+                              </h5>
                               <p class="item-card-para"></p>
                               <% if (item.offer>0){ %>
 
@@ -79,7 +79,7 @@
                                         %>&ensp;</span><span class="item-card-crossed mt-1"></span></p>
                                   <% }%>
 
-                                    <p class="fs-6 fw-bold mt-1 text-primary">Best Selling. Certified seller.</p>
+                                    <p class="fs-6 fw-bold mt-1 text-primary">ShoppyZone Certified Seller</p>
                             </div>
                           </div>
                         </a>
@@ -95,12 +95,12 @@
                           <%} %>
                         
         </div>
-        <div class="col-lg-12">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
+        <div class="col-lg-12 d-flex justify-content-center">
+        <nav aria-label="Page navigation example ">
+          <ul class="pagination align-items-center">
           <% for(let i =1; i<=pages; i++){ %>
           
-            <li class="page-item"><a class="page-link" href="/shop/next/?page=<%= i %>"><%= i %></a></li>
+            <li class="page-item "><a class="page-link" href="/shop/next/?page=<%= i %>"><%= i %></a></li>
           <% } %>
         
           </ul>

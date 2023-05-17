@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable eqeqeq */
-/* eslint-disable func-call-spacing */
 const User = require('../models/user')
 const Products = require('../models/products')
 const Orders = require('../models/order')
-const Razorpay = require ('razorpay')
+const Razorpay = require('razorpay')
 const Payments = require('../models/payment')
 const crypto = require('crypto')
 const Coupons = require('../models/coupon')
@@ -54,7 +51,6 @@ module.exports = {
             productId: item.productId._id,
             productName: item.productId.productname,
             color: item.productId.color,
-            size: item.productId.size,
             quantity: item.quantity,
             price: item.productId.price,
             image: item.productId.images[0]
@@ -104,7 +100,7 @@ module.exports = {
           }
         })
         let total = -discount
-        console.log (total + 'discount')
+        console.log(total + 'discount')
         total = (total + user.cartTotal)
         console.log(total + 'cart amount')
         const order = new Orders({
@@ -121,7 +117,6 @@ module.exports = {
             productId: item.productId._id,
             productName: item.productId.productname,
             color: item.productId.color,
-            size: item.productId.size,
             quantity: item.quantity,
             price: item.productId.price,
             image: item.productId.images[0],
@@ -132,8 +127,8 @@ module.exports = {
         await order.save()
 
         const instance = new Razorpay({
-          key_id: 'rzp_test_bVuwFNHsddTNfM',
-          key_secret: '6ATU4CwacPgOWPolRfew3Ylm'
+          key_id: 'rzp_test_FYf7DPYrvwXLlU',
+          key_secret: 'ATfwtRsjdXfheN7TgrLiqtG7'
         })
         instance.orders.create({
           amount: order.totalAmount * 100,
@@ -178,7 +173,7 @@ module.exports = {
       }
     })
     let total = -discount
-    console.log (total + 'discount paypal')
+    console.log(total + 'discount paypal')
     total = (total + user.cartTotal)
     console.log(total + 'cart amount paypal')
 
