@@ -12,6 +12,10 @@ const bannerSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Image cannot be empty']
     },
+    link: {
+        type: String,
+        required: true
+    },
     setCurrent: {
         type: Boolean,
         default: false

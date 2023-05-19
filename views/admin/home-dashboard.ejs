@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../partials/head') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <body class="d-flex flex-column min-vh-100">
@@ -10,11 +12,34 @@
     <p class="d-flex align-items-center text-center justify-content-center"><a class=" text-decoration-none text-light fw-bolder bg-dark rounded-4 p-2" href="/admin/sale-details" method="post">Sales
         Report</a></p>
   </div>
+  <ul class="summary-items">
+    <li>
+      <div class="summary-title color1">
+        <span> <i class="fa fa-users"></i> Orders</span>
+      </div>
+      <div class="summary-body"> <%= ordersCount %></div>
+    </li>
+    <li>
+      <div class="summary-title color2">
+        <span> <i class="fa fa-users"></i> Users</span>
+      </div>
+      <div class="summary-body"><%= usersCount %></div>
+
+    </li>
+    <li>
+      <div class="summary-title color3">
+        <span> <i class="fa fa-users"></i> Products</span>
+      </div>
+      <div class="summary-body"><%= productsCount %></div>
+
+    </li>
+  </ul>
+
+
+
   <section class="container d-flex">
-    <!-- <div class="d-flex align-items-center ">
-          <div style="width: 1000px ;margin-left: 150px;"><canvas id="saleschart"></canvas>
-          </div>
-        </div> -->
+
+
     <div class="col-md-6 m-3">
       <div class="card p-3">
         <h4>Daily Sales</h4>

@@ -1,4 +1,6 @@
 const Orders = require('../models/order')
+const User = require('../models/user')
+
 
 module.exports = {
     getOrders: async (req, res) => {
@@ -21,7 +23,7 @@ module.exports = {
 
             })
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     },
     changeStatus: async (req, res) => {
@@ -67,19 +69,9 @@ module.exports = {
             ])
             res.json({ orders })
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     },
-    // returnOrder: async (req, res) => {
-    //     const { id } = req.body
-    //     try {
-    //         const order = await Orders.findOneAndUpdate({ _id: id }, { $set: { return: true, returnStatus: 'Requested' } })
-    //         res.json({ successStatus: true })
-    //     } catch (error) {
-    //         console.log(error)
-    //         res.json({ successStatus: false })
-    //     }
-    // },
 
     getOrderViewDetails: async (req, res) => {
         try {
@@ -87,7 +79,7 @@ module.exports = {
             const orders = await Orders.find({ customerId: req.session.user._id }).sort({ createdAt: -1 })
             res.render('/admin/view-details', { orders, user })
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     }
 }

@@ -56,7 +56,8 @@ router.get('/orders/view-details', session.isLogged, orderController.getOrderVie
 router.get('/coupon', session.isLogged, couponController.getCoupon)
 router.post('/coupon/add', session.isLogged, couponController.addCoupon)
 router.patch('/coupons/:id', session.isLogged, couponController.deleteCoupon)
-router.patch('/coupons/editcoupon/:id', session.isLogged, couponController.editCoupon)
+router.get('/editcoupon/:id', session.isLogged, couponController.getEditCoupon)
+router.post('/editcoupon/:id', session.isLogged, couponController.updateCoupon)
 
 
 
@@ -65,16 +66,10 @@ router.get('/sale-details', adminController.getSalesDetails)
 router.get('/sales-report/pdf', adminController.salesReportPdf)
 router.get('/sales-report/excel', session.isLogged, adminController.salesReportExcel);
 
-
-// router.get('/returns', authenticate, returnController.getReturnPage)
-
-// router.patch('/returns', authenticate, returnController.acceptReturn)
-
-// router.patch('/returns/status', authenticate, returnController.changeReturnStatus)
+router.post('/sales-details',)
 
 
 
 
-// router.get('/sales-report', adminController.getDateFilter);
 
 module.exports = router

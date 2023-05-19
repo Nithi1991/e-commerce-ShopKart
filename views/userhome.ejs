@@ -4,10 +4,11 @@
 
 <body>
   <%-include ('./partials/user/user-navbar') %>
-
-  <header class="banner d-flex justify-content-center align-items-center" style="background-image: url('/<%= banner.image %>')">
-    <h1 class="banner-text text-white"><%= banner.caption %></h1>
-  </header>
+  <a href="<%= banner.link %>">
+    <section class="banner d-flex justify-content-center align-items-center" style="background-image: url('/<%= banner.image %>')">
+      <h1 class="banner-text text-white"><%= banner.caption %></h1>
+    </section>
+  </a>
 
   <div class="container">
     <h2 class="mt-3">ALL PRODUCTS</h2>

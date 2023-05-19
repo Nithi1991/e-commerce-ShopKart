@@ -19,7 +19,7 @@
               <th scope="col-2" class="fs-5">Payment Method</th>
               <th scope="col-" class="fs-5">Date</th>
               <th scope="col-2" class="fs-5">Actions</th>
-              <th scope="col-2" class="fs-5"> View-Details</th>
+              <!-- <th scope="col-2" class="fs-5"> View-Details</th> -->
             </tr>
           </thead>
           <tbody class="">
@@ -79,6 +79,8 @@
                 <% }else{ %>
                 <button class="btn btn-danger border-2 fw-bold " style="width: 125px;" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= count %>">Cancel</button>
                 <% } %>
+                <button class="btn btn-secondary mt-3 fw-bold " style="width: 125px"><a href="/admin/view-details"></a> View details</button>
+
                 <select class="form-select mt-3 fw-bold text-white" onchange="changeStatus('<%=orders.id %>','<%=count %>')" id="<%=count %>" style="width: 125px; background-color: rgb(99, 93, 93);" aria-label="Default select example">
                   <option selected><%= orders.orderStatus %></option>
                   <option value="Placed">Placed</option>
@@ -90,18 +92,11 @@
 
               </td>
 
-              <td class="fs-6 fw-bold">
-                <a href="/orders/view-details">
-                  <button class="btn btn-secondary mt-3 fw-bold" style="width: 125px;">
-                    View details
-                  </button>
-                </a>
-              </td>
 
               <!-- modal for showing details of products -->
 
 
-              <!-- <div class="modal fade  modal-xl scrollable" id="modal1<%=count %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal fade  modal-xl scrollable" id="modal1<%=count %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
                     <div class="modal-header">
@@ -158,7 +153,7 @@
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
 
 
               <!-- modal for showing the aleart of cancelling order -->

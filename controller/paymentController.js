@@ -20,7 +20,7 @@ module.exports = {
 
   placeorderCod: async (req, res) => {
     const discount = req.params.discount
-    console.log(discount + 'is the discounted amount')
+
     if (!req.body.address) {
       req.session.message = 'Please select a Address'
       res.redirect('/checkout')
@@ -32,7 +32,7 @@ module.exports = {
         const address = []
         user.shippingAddress.forEach(item => {
           if (req.body.address == item._id) {
-            console.log(item)
+
             address.push(item)
           }
         })
@@ -62,9 +62,9 @@ module.exports = {
 
         for (const item of user.cart) {
           const productId = item.productId._id
-          console.log(productId)
+
           const count = item.quantity
-          console.log(count)
+
           await Products.findOneAndUpdate({ _id: productId }, { $inc: { totalStoke: -count } })
           await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $set: { cartTotal: 0 } })
           await User.findOneAndUpdate({ _id: user._id }, { $pull: { cart: { productId } } })
@@ -72,21 +72,20 @@ module.exports = {
         await User.findOneAndUpdate({ _id: user._id }, { $inc: { totalSpent: (total - discount) } })
         return res.redirect('/payment/cod')
       } catch (err) {
-        console.log(err)
+        res.render('404')
       }
     }
   },
 
   placeorderRazorpay: async (req, res) => {
-    console.log('payment Started')
+
     if (!req.body.address) {
       req.session.message = 'Please select a Address'
       res.redirect('/checkout')
     } else {
       const discount = req.body.discount
       const address = req.body.address
-      console.log(address)
-      console.log(discount + 'the discount in razorpay')
+
 
       try {
         const user = await User.findById(req.session.user._id)
@@ -95,14 +94,14 @@ module.exports = {
         const address = []
         user.shippingAddress.forEach(item => {
           if (req.body.address == item._id) {
-            console.log(item)
+
             address.push(item)
           }
         })
         let total = -discount
-        console.log(total + 'discount')
+
         total = (total + user.cartTotal)
-        console.log(total + 'cart amount')
+
         const order = new Orders({
           customerId: req.session.user._id,
           address,
@@ -136,11 +135,10 @@ module.exports = {
           receipt: order._id.toString()
         }, (err, orderInstance) => {
           if (err) {
-            console.log(err)
+
             return res.json({ successStatus: false })
           }
-          console.log('order instance created')
-          console.log(orderInstance)
+
           return res.json({
             successStatus: true,
             orderInstance,
@@ -148,7 +146,7 @@ module.exports = {
           })
         })
       } catch (err) {
-        console.log(err)
+
         req.session.Errmessage = 'Some error occured please try again later'
         res.json({ successStatus: false })
       }
@@ -156,9 +154,7 @@ module.exports = {
   },
 
   paypalPayment: async (req, res) => {
-    console.log('start 1')
-    console.log(process.env.PAYPAL_CLIENT_ID)
-    console.log(process.env.PAYPAL_CLIENT_SECRET)
+
     const request = new paypal.orders.OrdersCreateRequest()
 
     const user = await User.findById(req.session.user._id)
@@ -168,16 +164,13 @@ module.exports = {
     const address = []
     user.shippingAddress.forEach(item => {
       if (req.body.address == item._id) {
-        console.log(item)
+
         address.push(item)
       }
     })
     let total = -discount
-    console.log(total + 'discount paypal')
     total = (total + user.cartTotal)
-    console.log(total + 'cart amount paypal')
 
-    console.log(total)
     const order = new Orders({
       customerId: req.session.user._id,
       address,
@@ -224,18 +217,15 @@ module.exports = {
       ]
     })
     try {
-      console.log(request)
       const order = await paypalClient.execute(request)
-      console.log(order)
       res.json({ id: order.result.id })
       const order1 = await Orders.find({ id: orderid })
-      console.log(order1)
 
       await User.findOneAndUpdate({ _id: req.session.user._id }, { $set: { cartTotal: 0 } })
 
       await User.findOneAndUpdate({ id: req.session.user.id }, { $set: { cart: [] } })
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   }
 

@@ -18,7 +18,7 @@ module.exports = {
     },
     saveBanner: async (req, res) => {
         try {
-            const { name, caption } = req.body
+            const { name, caption, link } = req.body
             if (!name) {
                 req.session.message = 'Name cannot be empty'
                 return res.redirect('/admin/banner')
@@ -30,12 +30,13 @@ module.exports = {
             const banner = new Banner({
                 name,
                 caption,
-                image: paths
+                image: paths,
+                link
             })
             await banner.save()
             res.redirect('/admin/banner')
         } catch (error) {
-            console.log(error)
+            res.redirect('/admin/error')
         }
     },
     setCurrentBanner: async (req, res) => {
@@ -44,7 +45,7 @@ module.exports = {
             await Banner.findOneAndUpdate({ _id: req.body.bannerId }, { $set: { setCurrent: true } })
             res.json({ successStatus: true })
         } catch (error) {
-            console.log(error)
+
             res.json({ successStatus: false })
         }
     },
@@ -54,7 +55,7 @@ module.exports = {
             await Banner.findOneAndUpdate({ _id: req.params.id }, { $set: { isDeleted: true } })
             res.json({ successStatus: true })
         } catch (error) {
-            console.log(error)
+
             res.json({ successStatus: false })
         }
     }

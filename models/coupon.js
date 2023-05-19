@@ -12,13 +12,19 @@ const CouponSchema = new mongoose.Schema({
     },
     isPercentage: {
         type: Boolean,
-        default: false
+        default: true
     },
-    minPurchaseValue: {
-        type: Number
+    minPurchase: {
+        type: Number,
+        required: true,
+    },
+    maxDiscount: {
+        type: Number,
+        required: true,
     },
     expiry: {
         type: Date,
+        required: true,
 
     },
     discount: {

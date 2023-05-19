@@ -18,14 +18,39 @@ module.exports = {
     }
   },
   getAdminhome: async (req, res) => {
+    const ordersCount = await Orders.aggregate([
+      {
+        $group: {
+          _id: null,
+          Count: { $sum: 1 },
 
-    return res.render('admin/home-dashboard')
+        },
+      },
+    ])
+    const usersCount = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          Count: { $sum: 1 },
+
+        },
+      },
+    ])
+    const productsCount = await Products.aggregate([
+      {
+        $group: {
+          _id: null,
+          Count: { $sum: 1 },
+
+        },
+      },
+    ])
+    return res.render('admin/home-dashboard', { ordersCount: ordersCount[0].Count, usersCount: usersCount[0].Count, productsCount: productsCount[0].Count })
   },
   redirectAdminhome: async (req, res) => {
     const admin = await Adminregister.find({ adminname: req.body.adminname })
     if (admin.length != 0) {
       if (admin[0].adminpassword != req.body.adminpassword) {
-        console.log(req.body.adminpassword)
         req.session.message = 'password not correct'
         res.redirect('/admin')
       } else {
@@ -47,7 +72,7 @@ module.exports = {
       const register = await User.find()
       return res.render('admin/user/userdata', { register })
     } catch (err) {
-      console.log(err)
+      res.redirect('/admin/error')
     }
   },
   blockUser: async (req, res) => {
@@ -55,10 +80,10 @@ module.exports = {
     try {
       const id = req.params.id
       const user = await User.findById(id)
-      console.log(user)
+
 
       if (user.isBlocked) {
-        console.log('blocked')
+
         try {
           await User.findOneAndUpdate({ _id: id }, {
             $set: {
@@ -70,34 +95,33 @@ module.exports = {
             redirect: '/admin/users'
           })
         } catch (err) {
-          console.log(err)
+          res.redirect('/admin/error')
           return res.json({
             successStatus: false
           })
         }
       } else {
-        console.log('not blocked')
+
         try {
           const find = await User.findOneAndUpdate({ _id: id }, {
             $set: {
               isBlocked: true
             }
           })
-          console.log(find)
-          console.log('done')
+
           return res.json({
             successStatus: true,
             redirect: '/admin/users'
           })
         } catch (err) {
-          console.log(err)
+
           return res.json({
             successStatus: false
           })
         }
       }
     } catch (error) {
-      console.log(error)
+      res.redirect('/admin/error')
     }
   },
 
@@ -105,11 +129,9 @@ module.exports = {
     try {
       const orders = await Orders.find({ $match: { cancelled: false, paymentVerified: true } }).sort({ createdAt: -1 })
         .populate('customerId')
-
-      console.log('puppeteer orders')
       res.render('admin/sales-details', { orders })
     } catch (err) {
-      console.log(err)
+      res.redirect('/admin/error')
     }
   },
 
@@ -167,7 +189,7 @@ module.exports = {
           },
         },
       ]);
-      console.log(orders);
+
       const fields = [
         {
           label: 'Customer Name',
@@ -204,20 +226,16 @@ module.exports = {
       fs.writeFileSync('data.csv', csv);
       res.download('data.csv', 'Sales Report.csv');
     } catch (error) {
-      console.log(error);
+      res.redirect('/admin/error')
     }
   },
-  getDateFilter: async (req, res) => {
-    // Get the date query parameter from the request
-    const date = req.query.date; // Assuming the query parameter is 'date'
+  getAdminDashboard: async (req, res) => {
+    try {
+      const user = await User.find()
+      res.render('/admin/home-dashboard', { user })
+    } catch (error) {
 
-    // Filter the orders based on the provided date
-    const filteredOrders = await orders.filter(order => {
-      const orderDate = new Date(order.createdAt).toLocaleDateString('en-GB');
-      return orderDate === date;
-    });
-
-    res.render('sales-report', { orders: filteredOrders });
+    }
   }
 
 }

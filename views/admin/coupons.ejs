@@ -15,7 +15,8 @@
             <th scope="col">Code</th>
             <th scope="col">Details</th>
             <th scope="col">Expiry </th>
-            <th scope="col">Purchase Value </th>
+            <th scope="col">minPurchase </th>
+            <th scope="col">maxDiscount </th>
             <th scope="col">Discount</th>
             <th scope="col">Percentage</th>
             <th scope="col">Delete</th>
@@ -32,36 +33,35 @@
             <th scope="row"><%=count++ %></th>
             <td><%= items.coupon %></td>
             <td><%=items.details %></td>
-            <td><%=items.expiry.toLocaleString() %></td>
-            <td><%=items.minPurchaseValue %></td>
-
-            < <td><%=items.discount %>
-              </td>
-              <td><%=items.isPercentage %></td>
-              <td><button class="btn btn-outline-warning fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= count %>">Delete</button>
-              <td class=""><a href="/admin/coupons/editcoupon/<%=items._id %> "><button class="btn btn-primary border-2 w-100 fw-bold">Edit</button></a></td>
-
+            <td><%=items.expiry %></td>
+            <td><%=items.minPurchase %></td>
+            <td><%=items.maxDiscount %></td>
+            <td><%=items.discount %></td>
+            <td><%=items.isPercentage %></td>
+            <td><button class="btn btn-outline-warning fw-bold" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= count %>">Delete</button>
+            <td class=""><a href="/admin/editcoupon/<%=items._id %> "><button class="btn btn-primary border-2 w-100 fw-bold">Edit</button></a></td>
 
 
 
-              <div class="modal fade" id="staticBackdrop<%= count %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Coupon</h1>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                      It will be removed !!!
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger" id="delete<%= count %>" onclick="deleteCoupon(this.id)" data-url="<%= items._id %>">Delete</button>
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    </div>
+
+            <div class="modal fade" id="staticBackdrop<%= count %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Coupon</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    It will be removed !!!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="delete<%= count %>" onclick="deleteCoupon(this.id)" data-url="<%= items._id %>">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                   </div>
                 </div>
               </div>
-              </td>
+            </div>
+            </td>
           </tr>
           <% }) %>
           <%  } else{ %>
@@ -87,7 +87,8 @@
         <input class="form-control form-control-lg mb-2  " type="text" name="coupon" id="coupon" placeholder="New Coupon" required></input>
         <input class="form-control form-control-lg mb-2 " type="text" name="details" id="details" placeholder="Discription"></input>
         <input class="form-control form-control-lg mb-2 " type="text" name="expiry" id="expiry" placeholder="Expiry Date" required></input>
-        <input class="form-control form-control-lg mb-2 w " type="text" name="minPurchaseValue" id="minPurchaseValue" placeholder="MinPurchaseValue" required></input>
+        <input class="form-control form-control-lg mb-2 w " type="text" name="minPurchase" id="minPurchase" placeholder="MinPurchase" required></input>
+        <input class="form-control form-control-lg mb-2 w " type="text" name="maxDiscount" id="maxDiscount" placeholder="maxDiscount" required></input>
         <input class="form-control form-control-lg mb-2 w " type="text" name="discount" id="discount" placeholder="Discount" required></input>
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="percentage" name="percentage" id="percentage">

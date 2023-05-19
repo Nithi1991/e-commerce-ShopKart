@@ -21,7 +21,7 @@ module.exports = {
         return res.render('user/cart', { cart, user, message })
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   getWishlist: async (req, res) => {
@@ -40,7 +40,6 @@ module.exports = {
         const shippingAddress = user.shippingAddress
         const message = req.session.message
         discount = req.session.addeddiscount
-        console.log(discount)
         req.session.addeddiscount = 0
         req.session.message = ''
         return res.render('user/checkout', { cart, user, shippingAddress, message, discount })
@@ -51,7 +50,7 @@ module.exports = {
         const cart = user.cart
         const shippingAddress = user.shippingAddress
         discount = req.session.addeddiscount
-        console.log(discount)
+       
         req.session.addeddiscount = 0
         const message = ''
         return res.render('user/checkout', { cart, user, shippingAddress, message, discount })
@@ -66,7 +65,7 @@ module.exports = {
         return res.render('user/checkout', { cart, user, shippingAddress, message, discount })
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   addtoCart: async (req, res) => {
@@ -82,15 +81,15 @@ module.exports = {
       amount = product.price
     }
 
-    console.log(amount)
+
     try {
       if (pro.length > 0) {
         await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity': +1, cartTotal: Math.round(amount) } })
       } else {
         const user = await User.findById(req.session.user._id)
-        console.log(user)
+      
         const product = await Products.findById(productId)
-        console.log(product)
+    
         let total
         if (product.offer > 0) {
           total = Math.round(product.price - (product.price * product.offer / 100))
@@ -104,7 +103,6 @@ module.exports = {
         }
 
         const users = await User.findOneAndUpdate({ _id: req.session.user._id }, { $push: { cart: cartItem } })
-        console.log(users)
         await User.findOneAndUpdate({ _id: req.session.user._id }, { $inc: { cartTotal: total } })
         res.json({
           successStatus: true,
@@ -112,7 +110,6 @@ module.exports = {
         })
       }
     } catch (error) {
-      console.log(error)
       res.json({
         successStatus: false,
         message: 'Some error occured. Please try again later'
@@ -123,8 +120,6 @@ module.exports = {
     try {
       const user = req.session.user
       const productId = req.body.id
-      console.log(req.body)
-      console.log(productId)
       const product = await Products.findOne({ _id: productId })
       const userData = await User.findOne({ _id: user._id })
 
@@ -135,8 +130,6 @@ module.exports = {
           quantity = item.quantity
         }
       })
-      console.log('above quantity')
-      console.log(quantity)
       let price
       if (product.offer > 0) {
         price = Math.round((product.price) - (product.price * (product.offer / 100)))
@@ -150,7 +143,6 @@ module.exports = {
         message: ' product removed from cart'
       })
     } catch (err) {
-      console.log(err)
       res.json({
         successStatus: false,
         message: 'Some error occured. Please try again later'
@@ -167,20 +159,17 @@ module.exports = {
       if (product.offer > 0) {
         price = Math.round((product.price) - (product.price * product.offer / 100))
         offer = Math.round(product.price * product.offer / 100)
-        console.log(offer + 'with offer')
+
       } else {
         price = product.price
         offer = 0
-        console.log(offer + 'without offer')
       }
       const productId = req.body.id
       const user = await User.findById(req.session.user._id)
       const total = price * req.body.amount
-      console.log(total + 'price')
       let flag = true
       let quantity
       const totalStoke = product.totalStoke
-      console.log(totalStoke)
       user.cart.forEach(item => {
         if (item.productId == productId) {
           quantity = item.quantity
@@ -199,7 +188,6 @@ module.exports = {
           offer
         })
       }
-      console.log((user.cartTotal + total) + 'amount')
       const newquantity = req.body.amount
       const count = quantity + req.body.amount
       const firstvalue = user.cartTotal
@@ -219,7 +207,6 @@ module.exports = {
         })
       }
     } catch (err) {
-      console.log(err)
       return res.json({
         successStatus: false
       })
@@ -246,7 +233,7 @@ module.exports = {
         })
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   removeWishItem: async (req, res) => {
@@ -257,7 +244,7 @@ module.exports = {
       await User.findOneAndUpdate({ _id: user._id }, { $pull: { wishlist: { productId } } })
       return res.json({ successStatus: true })
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   addtoCartfromWish: async (req, res) => {
@@ -272,7 +259,6 @@ module.exports = {
     } else {
       amount = product.price
     }
-    console.log(amount)
     try {
       if (pro.length > 0) {
         await User.findOneAndUpdate({ _id: user._id, 'cart.productId': productId }, { $inc: { 'cart.$.quantity': +1, cartTotal: amount } })
@@ -283,10 +269,7 @@ module.exports = {
         })
       } else {
         const user = await User.findById(req.session.user._id)
-        console.log(user)
         const product = await Products.findById(productId)
-        console.log(product)
-
         let total
         if (product.offer > 0) {
           total = Math.round(product.price - (product.price * product.offer / 100))
@@ -299,7 +282,6 @@ module.exports = {
         }
 
         const users = await User.findOneAndUpdate({ _id: req.session.user._id }, { $push: { cart: cartItem } })
-        console.log(users)
         await User.findOneAndUpdate({ _id: req.session.user._id }, { $inc: { cartTotal: total } })
         await User.findOneAndUpdate({ _id: req.session.user._id }, { $pull: { wishlist: { productId } } })
         res.json({
@@ -308,7 +290,7 @@ module.exports = {
         })
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   }
 }

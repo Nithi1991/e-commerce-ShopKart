@@ -77,7 +77,7 @@ module.exports = {
           await message.sentotp(req.session.storeuser.number)
           res.redirect('./otp')
         } catch {
-          console.log('err')
+          res.render('404')
         }
       }
     } else {
@@ -110,7 +110,7 @@ module.exports = {
         }
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
 
@@ -119,7 +119,7 @@ module.exports = {
       await message.sentotp(req.session.storeuser.number)
       return res.redirect('/otp')
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   redirectHomepage: async (req, res) => {
@@ -160,7 +160,7 @@ module.exports = {
       const product = await Products.findById(productId)
       return res.render('user/product-details', { product })
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
 
@@ -170,7 +170,7 @@ module.exports = {
     return res.render('user/adddetails', { user, shippingAddress })
   },
   editUser: async (req, res) => {
-    console.log('edit')
+
     try {
       const edituser = ({
         username: req.body.username,
@@ -180,13 +180,13 @@ module.exports = {
       })
       req.session.edituser = edituser
       const number = req.body.number
-      console.log(number)
+
       req.session.otpnumber = number
       await message.sentotp(number)
 
       return res.redirect('/otpedit')
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   editUserwithOtp: async (req, res) => {
@@ -197,7 +197,7 @@ module.exports = {
         return res.redirect('/otp')
       } else {
         const check = await message.check(otp, req.session.otpnumber)
-        console.log(req.session.otpnumber + 'otp snt number')
+
         if (check.status == 'approved') {
           await User.findByIdAndUpdate({ _id: req.session.user._id }, req.session.edituser)
 
@@ -211,7 +211,7 @@ module.exports = {
         }
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
 
@@ -266,13 +266,13 @@ module.exports = {
         return res.redirect('/adddetails')
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
 
   paymentVerify: async (req, res) => {
     try {
-      console.log(req.body.payment)
+
       let hmac = crypto.createHmac('sha256', 'ATfwtRsjdXfheN7TgrLiqtG7')
       hmac.update(req.body.payment.razorpay_order_id + '|' + req.body.payment.razorpay_payment_id)
       hmac = hmac.digest('hex')
@@ -312,7 +312,7 @@ module.exports = {
         return res.json({ successStatus: false })
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   paymentCancel: async (req, res) => {
@@ -324,7 +324,7 @@ module.exports = {
       })
       res.json({ successStatus: true })
     } catch (error) {
-      console.log(error)
+
       res.json({ successStatus: false })
     }
   },
@@ -343,10 +343,10 @@ module.exports = {
           cancelled: true
         }
       })
-      console.log(order)
+
       res.json({ successStatus: true })
     } catch (error) {
-      console.log(error)
+      res.render('404')
     }
   },
 
@@ -355,9 +355,9 @@ module.exports = {
       const user = await User.findOne({ _id: req.session.user._id })
         .populate('cart.productId')
       const coupon1 = await Coupons.find({ coupon: req.body.coupon })
-      console.log(coupon1)
+
       const total = user.cartTotal
-      console.log(coupon1[0].discount)
+
 
       if (coupon1[0].users.includes(req.session.user._id)) {
         return res.json({
@@ -373,24 +373,24 @@ module.exports = {
         discount = (coupon1[0].discount)
       }
 
-      console.log(discount)
+
       req.session.addeddiscount = {
         discount,
         couponId: coupon1[0].id,
         coupon: coupon1[0].coupon
       }
-      console.log(req.session.addeddiscount)
+
       const discountprice = total - discount
 
       await Coupons.findOneAndUpdate({ coupon: req.body.coupon }, { $push: { users: req.session.user._id } })
-      console.log('sucess')
+
       res.json({
         successStatus: true,
         discountprice,
         discount
       })
     } catch (err) {
-      console.log(err)
+
       res.json({
         successStatus: false
       })
@@ -409,7 +409,7 @@ module.exports = {
     try {
       const mobilenumber = req.body.number
       req.session.mobilenumber = mobilenumber
-      console.log(mobilenumber)
+
       const number = await User.find({ number: req.body.number })
       if (!req.body.number) {
         req.session.message = 'Enter a Mobile Number'
@@ -425,7 +425,7 @@ module.exports = {
         res.redirect('/otpforgot')
       }
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   getOtpforgot: (req, res) => {
@@ -455,21 +455,18 @@ module.exports = {
     try {
       const newpassword = req.body.newpassword
       const password = await bcrypt.hash(newpassword, 10)
-      console.log(password)
+
       await User.findOneAndUpdate({ number: req.session.mobilenumber }, { $set: { password } })
       res.redirect('/login')
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
   deleteAddress: async (req, res) => {
     try {
-      console.log('delete address')
 
       const id = req.body.id
-      console.log(id)
       const addressId = req.body.addressId
-      console.log(addressId)
 
       await User.findOneAndUpdate({ _id: req.session.user._id }, { $pull: { shippingAddress: { _id: addressId } } })
       res.json({
@@ -479,7 +476,6 @@ module.exports = {
       res.json({
         successStatus: false
       })
-      console.log(err)
     }
   },
   getOtpEdit: (req, res) => {
@@ -495,16 +491,16 @@ module.exports = {
   getViewOrderDetails: async (req, res) => {
     const orderId = req.session.orderId
     const product = await Orders.find({ _id: orderId }).populate('customerId')
-    console.log(product + 'the details of order')
+    
     req.session.orderId = ''
     return res.render('user/order-product', { product })
   },
 
   viewOrderDetails: async (req, res) => {
     const id = req.body.id
-    console.log(id)
+   
     const product = await Orders.find({ _id: id })
-    console.log(product)
+    
     req.session.orderId = id
     return res.json({
       successStatus: true,
@@ -515,7 +511,7 @@ module.exports = {
 
   getShop: async (req, res) => {
     try {
-      console.log("get shop")
+      
       let searchWord
       let products
       let user
@@ -651,7 +647,7 @@ module.exports = {
         ])
         // .skip((page - 1) * perPage).limit(perPage)
       } else {
-        console.log('normalshop')
+        
         req.session.searchWordinFilter = ''
         req.session.searchWordforFilter = ''
         products = await Products.find({ isDeleted: false }).populate('categoryId').skip((page - 1) * perPage).limit(perPage)
@@ -665,7 +661,7 @@ module.exports = {
 
       return res.render('user/shop', { products, user, category, pages, searchWord })
     } catch (err) {
-      console.log(err)
+      res.render('404')
     }
   },
 
@@ -681,11 +677,9 @@ module.exports = {
     const searchWordinFilter = req.session.searchWordforFilter
 
     req.session.searchWordinFilter = searchWordinFilter
-    console.log(req.session.searchWordinFilter + "search word in filter");
-    console.log(req.session.to, req.session.from)
+   
     req.session.productCategory = req.query.category
 
-    console.log(req.session.productCategory + 'product category')
     res.redirect('/shop')
   },
 
@@ -695,7 +689,7 @@ module.exports = {
     searchWord = ''
     const page = req.query.page
     req.session.page = page
-    console.log(req.session.page + 'p')
+   
     let products
     let pages
     if (req.session.page) {

@@ -21,12 +21,16 @@ module.exports = {
             return res.redirect('/admin/coupon')
         }
 
-        const expiry = new Date(req.body.expiry + 'T23:59:59')
+        const expiry = new Date(req.body.expiry)
+
+
+
         const coupon = new Coupons({
             coupon: req.body.coupon,
             details: req.body.details,
             expiry,
-            minPurchaseValue: req.body.minPurchaseValue,
+            minPurchase: req.body.minPurchase,
+            maxDiscount: req.body.maxDiscount,
             discount: req.body.discount
 
         })
@@ -49,24 +53,41 @@ module.exports = {
         })
 
     }),
-    editCoupon: asyncHandler(async (req, res) => {
-        const { id } = req.params;
-        const coupon = await Coupons.findById(id);
-        if (!coupon) {
-            return res.status(404).send('Coupon not found');
+    getEditCoupon: async (req, res) => {
+        try {
+            const id = req.params.id
+            const coupon = await Coupons.findById({ _id: id });
+
+            res.status(200).render('admin/coupon-edit', { coupon })
+        } catch (error) {
+            res.redirect('/admin/error')
         }
 
-        // Update coupon properties
-        coupon.coupon = req.body.coupon;
-        coupon.details = req.body.details;
-        coupon.expiry = req.body.expiry;
-        coupon.discount = req.body.discount;
-        coupon.minPurchaseValue = req.body.minPurchaseValue
-        coupon.isPercentage = req.body.isPercentage;
+    },
+    updateCoupon: asyncHandler(async (req, res) => {
+        try {
+            const { id } = req.params;
+            const coupon = await Coupons.findById(id);
+            if (!coupon) {
+                return res.status(404).send('Coupon not found');
+            }
 
-        // Save updated coupon to database
-        await coupon.save();
-        return res.render('admin/coupon-edit', { coupon })
+            // Update coupon properties
+            coupon.coupon = req.body.coupon;
+            coupon.details = req.body.details;
+            coupon.expiry = req.body.expiry;
+            coupon.discount = req.body.discount;
+            coupon.minPurchase = req.body.minPurchase
+            coupon.maxDiscount = req.body.maxDiscount
+            coupon.isPercentage = req.body.isPercentage;
 
-    })
+            // Save updated coupon to database
+            await coupon.save();
+            res.redirect('/admin/coupon');
+        } catch (error) {
+
+        }
+
+    }),
+
 }

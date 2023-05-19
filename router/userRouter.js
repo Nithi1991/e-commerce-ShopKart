@@ -108,6 +108,5 @@ router.patch('/wishlist/cart/add', session.isLogged, cartController.addtoCartfro
 
 router.patch('/delete/address', session.isLogged, userController.deleteAddress)
 
-// router.patch('/orders/return', isUserBlocked, authenticate, orderController.returnOrder)
 
 module.exports = router

@@ -7,7 +7,7 @@ module.exports = {
             const products = await Products.find({ isDeleted: false }).populate('categoryId')
             return res.render('admin/product/product-details', { products })
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     },
     getAddproducts: async (req, res) => {
@@ -43,11 +43,11 @@ module.exports = {
                 await storeproducts.save()
                 return res.redirect('/admin/products')
             } catch (error) {
-                console.log(error)
+
                 return res.redirect('/admin/products/addproducts')
             }
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     },
     deleteProduct: async (req, res) => {
@@ -63,7 +63,7 @@ module.exports = {
                 redirect: '/admin/products'
             })
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     },
     editProduct: async (req, res) => {
@@ -90,15 +90,14 @@ module.exports = {
 
             //         images.push(paths.slice(7))
             //     }
-            console.log(id)
-            console.log(req.body)
+
             await Products.findByIdAndUpdate({ _id: id }, req.body)
             await Products.findByIdAndUpdate({ _id: id }, {
                 images
             })
             return res.redirect('/admin/products')
         } catch (err) {
-            console.log(err)
+            res.render('404')
         }
     },
 }

@@ -7,24 +7,25 @@
 
 
   <div class="container mt-5">
-    <form action="/admin/coupon/add" method="POST">
+    <form action="/admin/editcoupon/<%= coupon._id %>" method="POST">
       <h4 class="form-label">UPDATE COUPON</h4>
       <span class="text-danger fw-bold">
-        <%=message %>
+
       </span>
       <div class=" col-12 mt-3 ">
-        <input class="form-control form-control-lg mb-2  " type="text" name="coupon" id="coupon" placeholder="New Coupon" required></input>
-        <input class="form-control form-control-lg mb-2 " type="text" name="details" id="details" placeholder="Discription"></input>
-        <input class="form-control form-control-lg mb-2 " type="text" name="expiry" id="expiry" placeholder="Expiry Date" required></input>
-        <input class="form-control form-control-lg mb-2 w " type="text" name="minPurchaseValue" id="minPurchaseValue" placeholder="MinPurchaseValue" required></input>
-        <input class="form-control form-control-lg mb-2 w " type="text" name="discount" id="discount" placeholder="Discount" required></input>
+        <input class="form-control form-control-lg mb-2" type="text" name="coupon" id="coupon" placeholder="New Coupon" value="<%= coupon.coupon %>" required></input>
+        <input class="form-control form-control-lg mb-2" type="text" name="details" id="details" placeholder="Discription" value="<%= coupon.details %>"></input>
+        <input class="form-control form-control-lg mb-2" type="text" name="expiry" id="expiry" placeholder="Expiry Date" value="<%= coupon.expiry %>" required></input>
+        <input class="form-control form-control-lg mb-2" type="text" name="minPurchase" id="minPurchase" placeholder="MinPurchase" value="<%= coupon.minPurchase %>" required></input>
+        <input class="form-control form-control-lg mb-2" type="text" name="maxDiscount" id="maxDiscount" placeholder="maxDiscount" value="<%= coupon.maxDiscount %>" required></input>
+        <input class="form-control form-control-lg mb-2" type="text" name="discount" id="discount" placeholder="Discount" value="<%= coupon.discount %>" required></input>
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="percentage" name="percentage" id="percentage">
           <label class="form-check-label" for="flexCheckDefault">
             Discount in percentage
           </label>
         </div>
-        <button class="btn btn-outline-secondary btn-lg mt-3 mb-3 fw-bold " type="submit"> ADD COUPON</button>
+        <button class="btn btn-outline-secondary btn-lg mt-3 mb-3 fw-bold " type="submit"> UPDATE COUPON</button>
       </div>
     </form>
 
